@@ -29,7 +29,9 @@ class Application {
 
        try
        {
-           (new Application())->handleControllers();
+           (new Application())
+                ->parseEnvs()
+               ->handleControllers();
        }
        catch (\Exception $e)
        {
@@ -67,5 +69,34 @@ class Application {
 
    }
 
+   public function init()
+   {
+
+   }
+
+   public function parseEnvs()
+   {
+       $envFile = dirname(__DIR__, 1) . '/.env';
+       if(!file_exists($envFile))
+       {
+           throw new \Exception('.env not found. Copy .env.example into .env and update db settings');
+       }
+
+       $lines = explode(PHP_EOL, file_get_contents($envFile));
+       foreach ($lines as $line)
+       {
+           $line = trim($line);
+           if(strlen($line))
+           {
+               $parts = explode('=', $line);
+               if(count($parts) >= 2)
+               {
+                   putenv(sprintf("%s=%s", array_shift($parts), trim(array_shift($parts), '"')));
+               }
+           }
+       }
+
+       return $this;
+   }
 
 }
