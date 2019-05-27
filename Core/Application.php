@@ -15,8 +15,6 @@ namespace Core;
  */
 class Application {
 
-    private $basePath = __DIR__;
-
     private $controllerNameSpace = 'Core\Controllers\\';
 
     private $defaultController = 'home';  // homeController
@@ -66,7 +64,6 @@ class Application {
        }
 
        throw new \Exception('Controller Not Found');
-
 
    }
 

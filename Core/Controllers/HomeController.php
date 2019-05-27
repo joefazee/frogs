@@ -2,16 +2,20 @@
 
 namespace Core\Controllers;
 
+use Core\View;
+
 /**
  * Class HomeController
  *
  * @package \Core\Controllers
  */
-class HomeController
+class HomeController extends Base
 {
 
     public function index()
     {
-        echo __METHOD__;
+
+        $this->view('index.tpl');
+
     }
 }
