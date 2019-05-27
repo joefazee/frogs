@@ -2,6 +2,7 @@
 
 namespace Core\Controllers;
 
+use Core\Models\Store;
 use Core\View;
 
 /**
@@ -12,6 +13,13 @@ use Core\View;
 class Base
 {
     protected $viewEngine;
+
+    protected $store;
+
+    public function __construct()
+    {
+        $this->store = new Store();
+    }
 
     protected function view($name, array $args = [])
     {
