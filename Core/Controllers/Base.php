@@ -20,5 +20,14 @@ class Base
         $this->viewEngine->assign($args);
 
         $this->viewEngine->display($name);
+
+    }
+
+    protected function renderJson(array $data, $status=200)
+    {
+        http_response_code($status);
+        header('Content-Type: application/json');
+        echo json_encode($data);
+        exit;
     }
 }
