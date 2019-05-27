@@ -38,4 +38,14 @@ class Base
         echo json_encode($data);
         exit;
     }
+
+    protected function methodIs($methodName)
+    {
+            return strtolower($_SERVER['REQUEST_METHOD']) === strtolower($methodName);
+    }
+
+    protected function posts($key=null)
+    {
+       return $key && isset($_POST[$key]) ? $_POST[$key] : '';
+    }
 }

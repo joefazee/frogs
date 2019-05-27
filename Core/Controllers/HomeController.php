@@ -2,7 +2,8 @@
 
 namespace Core\Controllers;
 
-use Core\View;
+
+use Core\Models\Store;
 
 /**
  * Class HomeController
@@ -14,8 +15,11 @@ class HomeController extends Base
 
     public function index()
     {
-
         $this->view('index.tpl');
+    }
+
+    public function test()
+    {
 
     }
 }

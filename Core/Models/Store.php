@@ -176,4 +176,40 @@ class Store {
         return mysqli_insert_id($this->con);
     }
 
+    /**
+     * Delete a frog by an id
+     * @param $id
+     *
+     * @return bool
+     */
+    public function deleteFrogById($id)
+    {
+        $statement = $this->con->prepare('DELETE FROM frogs where id = ?');
+        $statement->bind_param('i', $id);
+        $statement->execute();
+        $statement->close();
+        return true;
+    }
+
+
+    /**
+     * Update frog record
+     * @param        $id
+     * @param        $weight
+     * @param        $color
+     * @param string $batch
+     * @param null   $group_id
+     *
+     * @return bool
+     */
+    public function updateFrog($id, $weight, $color, $batch='', $group_id=null)
+    {
+        $statement = $this->con->prepare('UPDATE frogs SET weight = ?, color = ?, batch = ?, group_id = ? WHERE id = ?');
+
+        $statement->bind_param('issii', $weight, $color, $batch, $group_id, $id);
+        $statement->execute();
+        $statement->close();
+        return true;
+    }
+
 }
