@@ -145,4 +145,35 @@ class Store {
         $statement->close();
         return true;
     }
+
+    /**
+     * Return all the frogs
+     *
+     * @return array
+     */
+    public function getAllFrogs()
+    {
+        $output = [];
+        $query = $this->con->query('SELECT f.*, g.name as group_name from frogs f LEFT JOIN groups g ON f.group_id = g.id');
+
+        while($row = $query->fetch_object()) {
+            $output[] = $row;
+        }
+
+        return $output;
+    }
+
+
+    public function createFrog($weight, $color, $batch='', $group_id=null)
+    {
+
+        $statement = $this->con->prepare('INSERT INTO frogs (weight, color, batch, group_id) VALUES (?, ?, ?, ?)');
+        if(!$batch) $batch = time();
+
+        $statement->bind_param('issi', $weight, $color, $batch, $group_id);
+        $statement->execute();
+        $statement->close();
+        return mysqli_insert_id($this->con);
+    }
+
 }
