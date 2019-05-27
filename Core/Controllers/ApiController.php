@@ -12,6 +12,31 @@ class ApiController extends Base
 
     public function groups()
     {
+        if($this->methodIs('post'))
+        {
+            $name = $this->posts('name');
+            $id = $this->posts('id');
+
+            if($id)
+            {
+                if(!$name)
+                {
+                    $this->store->deleteGroup($id);
+                }
+                else
+                {
+                    $this->store->updateGroup($name, $id);
+                }
+            }
+            else
+            {
+                $this->store->createGroup($name);
+            }
+
+            $this->renderJson(['status' => 'ok']);
+
+        }
+
         $this->renderJson(['status' => 'ok', 'data' => $this->store->getAllGroups()]);
     }
 
@@ -47,11 +72,10 @@ class ApiController extends Base
            $this->renderJson(['status' => 'ok']);
 
         }
-        else
-        {
-            // render frogs
-            $this->renderJson(['status' => 'ok', 'data' => $this->store->getAllFrogs()]);
-        }
+
+        // render frogs
+        $this->renderJson(['status' => 'ok', 'data' => $this->store->getAllFrogs()]);
+
     }
 
     public function deleteFrog($id)

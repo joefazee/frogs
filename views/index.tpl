@@ -23,7 +23,6 @@
 <body data-gr-c-s-loaded="true">
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
     <h5 class="my-0 mr-md-auto font-weight-normal">Wakanow</h5>
-    <a class="btn btn-outline-primary" href="#">Seed DB</a>
 </div>
 
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
@@ -95,112 +94,43 @@
                     <h4 class="my-0 font-weight-normal">Groups</h4>
                 </div>
                 <div class="card-body">
-
+                    <input type="text" class="form-control" v-model="newGroup" @keyup.enter="handleAddGroup" placeholder="Enter new group. Press enter">
+                    <hr>
+                    <p v-for="g in groups" >
+                        <input type="text" class="form-control"  :value="g.name" @keyup.enter="handleAddGroup($event, g)">
+                    </p>
                 </div>
             </div>
-
-
     </div>
 
 
 </div>
 
+    <div class="row">
+        <div class="col-md-12">
+            <p><strong>README</strong></p>
+            <ul>
+                <li>To form under Frog`s log is used both for creating and editing.</li>
+                <li>To first input under group is used for creating new group. Press enter key to save.</li>
+                <li><strong>To delete a group</strong> wipe the name and press enter key on the empty input.</li>
+                <li>When you create a group, it automatically sync with the group dropdown. No need to refresh.</li>
+                <li>
+                    <strong>TECH STACK</strong>: PHP, Smarty (Not really used), MySQL, VueJS, HTML, CSS
+                </li>
+                <li>Instead of using individual PHP files, i wired up a quick micro framework that can help with some routing. </li>
+                <li>
+                    <string>IMPORTANT NOTICE: No Unit Testing, Error check can be better, validation can be better.</string>
+                </li>
+            </ul>
+        </div>
+    </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-    <script type="application/javascript">
-        var frogApp = new Vue({
-            delimiters: ['%%', '%%'],
-            el: '#frogApp',
-            data: {
-                records: [],
-                networkRequest: false,
-                form: {
-                    group_id: ''
-                },
-                errorMessage: null,
-                groups: []
-            },
-            methods: {
-                fetchFrogs() {
-                    let vm = this;
-                    vm.networkRequest = true;
-                    axios.get('/api/frogs').then((res) => {
-                       vm.networkRequest = false;
-                       vm.records = res.data.data;
-                    }).catch(function(e){
-                        alert('ERROR: ' + e);
-                        vm.networkRequest = false;
-                    });
-                },
+    <script src="/js/script.js"></script>
 
-                fetchGroups() {
-                    let vm = this;
-                    vm.networkRequest = true;
-                    axios.get('/api/groups').then((res) => {
-                        vm.networkRequest = false;
-                        vm.groups = res.data.data;
-                    }).catch(function(e){
-                        alert('ERROR: ' + e);
-                        vm.networkRequest = false;
-                    });
-                },
 
-                handleDelete(record) {
-                    if(confirm('Are you sure you want to delete entry? Click Cancel to abort.')) {
-                        let vm = this;
-                        vm.networkRequest = true;
-                        axios.get('/api/deleteFrog/' + record.id).then((res) => {
-                            vm.fetchFrogs();
-                            vm.networkRequest = false;
-                        }).catch(function(e){
-                            alert('ERROR: ' + e);
-                            vm.networkRequest = false;
-                        });
-                    }
-                },
-                saveRecord() {
-                    let vm = this;
-                    vm.networkRequest = true;
-                    vm.errorMessage = null;
-                    let bodyFormData = new FormData();
-                    for(var k in vm.form) {
-                        bodyFormData.append(k, vm.form[k]);
-                    }
-                    axios({
-                        method: 'POST',
-                        url: '/api/frogs',
-                        data: bodyFormData,
-                        headers: {
-                            'content-type': `multipart/form-data`,
-                        },
-                    }).then((res) => {
-                        if(res.data.status === 'error'){
-                           vm.errorMessage = res.data.message;
-                        }
-                        vm.fetchFrogs();
-                        vm.networkRequest = false;
-                        this.resetForm();
-                    }).catch(function(e){
-                        alert('ERROR: ' + e);
-                        vm.networkRequest = false;
-                    });
-                },
-                handleEdit(record) {
-                    this.form = record;
-                },
-                resetForm() {
-                    this.form = {
-                        group_id: ''
-                    }
-                }
-            },
-            mounted(){
-                this.fetchFrogs();
-                this.fetchGroups();
-            }
-        });
-    </script>
 </body>
 </html>
